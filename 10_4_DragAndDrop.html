@@ -1,31 +1,67 @@
-<div id="mainContainer">
-		<h2>Drag and drop - demo 3</h2>
-		<div class="konaBody">
-			This is an example of how you can use this script to create your own "drag'n drop applications".
-		</div>
-		<div id="capitals">
-			<p><b>Capitals</b></p>
-			<div id="dropContent">
-				<div class="dragableBox" id="DHTMLgoodies_dragableElement0" dragableelement="0" style="position: absolute; visibility: visible; display: none; top: 574px; left: 279px; z-index: 10001;">Oslo</div>
-				<div class="dragableBox" id="DHTMLgoodies_dragableElement1" dragableelement="1" style="position: absolute; visibility: visible; display: none; top: 574px; left: 279px; z-index: 10002;">Stockholm</div>
-				<div class="dragableBox" id="DHTMLgoodies_dragableElement2" dragableelement="2" style="position: absolute; visibility: hidden; display: none; top: 386px; left: 287px;">Washington</div><div class="dragableBox" id="box3" dragableelement="2">Washington</div>
-				<div class="dragableBox" id="DHTMLgoodies_dragableElement3" dragableelement="3" style="position: absolute; visibility: hidden; display: none; top: 433px; left: 287px;">Copenhagen</div><div class="dragableBox" id="box4" dragableelement="3">Copenhagen</div>
-				<div class="dragableBox" id="DHTMLgoodies_dragableElement4" dragableelement="4" style="position: absolute; visibility: hidden; display: none; top: 480px; left: 287px;">Seoul</div><div class="dragableBox" id="box5" dragableelement="4">Seoul</div>
-				<div class="dragableBox" id="DHTMLgoodies_dragableElement5" dragableelement="5" style="position: absolute; visibility: hidden; display: none; top: 527px; left: 287px;">Rome</div><div class="dragableBox" id="box6" dragableelement="5">Rome</div>
-				<div class="dragableBox" id="DHTMLgoodies_dragableElement6" dragableelement="6" style="position: absolute; visibility: hidden; display: none; top: 574px; left: 287px;">Madrid</div><div class="dragableBox" id="box7" dragableelement="6">Madrid</div>
-			<div class="dragableBox" id="box1" dragableelement="0" style="visibility: visible;">Oslo</div><div class="dragableBox" id="box2" dragableelement="1" style="visibility: visible;">Stockholm</div></div>
-		</div>
-		<div id="countries">
-			<div id="box106" class="dragableBoxRight">Italy</div>
-			<div id="box107" class="dragableBoxRight">Spain</div>
-			<div id="box101" class="dragableBoxRight">Norway</div>
-			<div id="box104" class="dragableBoxRight">Denmark</div>
-			<div id="box105" class="dragableBoxRight">South Korea</div>
-			<div id="box102" class="dragableBoxRight">Sweden</div>
-			<div id="box103" class="dragableBoxRight">United States</div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>드래그 가능한 블록</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 50%;
+            margin: auto;
+            margin-top: 50px;
+        }
 
+        .block {
+            width: 100px;
+            height: 100px;
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+            text-align: center;
+            line-height: 100px;
+            cursor: pointer;
+        }
 
-		</div>
-		<div class="clear"></div>
-		<div class="konaBody"></div>
-	</div>
+        .draggable {
+            cursor: pointer;
+            -webkit-app-region: no-drag; /* 드래그 비활성화 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 비어있는 블록 -->
+        <div class="block droppable" id="block0" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="block droppable" id="block1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="block droppable" id="block2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="block droppable" id="block3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="block droppable" id="block4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    </div>
+
+    <div class="container">
+        <!-- 드래그 가능한 블록 -->
+        <div class="block draggable" id="dragA" draggable="true" ondragstart="drag(event)">A</div>
+        <div class="block draggable" id="dragB" draggable="true" ondragstart="drag(event)">B</div>
+        <div class="block draggable" id="dragC" draggable="true" ondragstart="drag(event)">C</div>
+        <div class="block draggable" id="dragD" draggable="true" ondragstart="drag(event)">D</div>
+        <div class="block draggable" id="dragE" draggable="true" ondragstart="drag(event)">E</div>
+    </div>
+
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            var data = event.dataTransfer.getData("text");
+            event.target.appendChild(document.getElementById(data));
+        }
+    </script>
+</body>
+</html>
