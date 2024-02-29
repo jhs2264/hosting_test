@@ -1,1 +1,41 @@
-<div class="wrapper"><section class="py-50"><div class="container"><div class="w-12/12"><h1 class="text-size-48 font-bold text-black text-center leading-none text-shadow md:w-full leading-height-70 mx-auto smtablet:text-size-30 smtablet:leading-height-42">Dropdown Demo</h1></div></div></section><section class="mt-50"><div class="container"><div class="flex smtablet:block"><div class="w-full px-15 smtablet:mt-20"><div class="mt-30 rounded"><div class="text-size-18 font-semibold px-10 py-10 text-black">Select Option</div><div class="px-10 pt-10 pb-5"><select class="form-control text-size-14 w-full block border border-gray-400 px-5 py-5 mt-10" id="select-demo"><option value="" selected="" disabled="">Please select</option><option value="Sunday">Sunday</option><option value="Monday">Monday</option><option value="Tuesday">Tuesday</option><option value="Wednesday">Wednesday</option><option value="Thursday">Thursday</option><option value="Friday">Friday</option><option value="Saturday">Saturday</option></select><br><p class="selected-value text-size-14"></p></div></div><div class="mt-30 rounded"><div class="text-size-18 font-semibold px-10 py-10 text-black">Multi Select Option</div><div class="input-body px-10 py-20"><div class="flex smtablet:block"><div class="w-8/12 smtablet:w-full left-input mr-20 pr-30 smtablet:mr-0 smtablet:pr-0"><select size="10" name="States" multiple="" id="multi-select" class="text-size-14 border border-gray-400 w-150"><option value="California">California</option><option value="Florida">Florida</option><option value="New Jersey">New Jersey</option><option value="New York">New York</option><option value="Ohio">Ohio</option><option value="Texas">Texas</option><option value="Pennsylvania">Pennsylvania</option><option value="Washington">Washington</option></select><br><br><button type="button" value="Print First" id="printMe" class="btn btn-dark selenium_btn bg-black text-white hover:bg-lambda-900 p-5 mr-15">First Selected</button><button type="button" value="Print All" id="printAll" class="btn btn-dark selenium_btn bg-black text-white hover:bg-lambda-900 p-5">Get Last Selected</button></div><div class="w-4/12 smtablet:w-full rigth-input"><p class="text-size-14">First selected option is : <span class="genderbutton"></span></p><p class="text-size-14 mt-20">Last selected option is :  <span class="groupradiobutton block break-words"></span></p></div></div></div></div></div></div></div></section></div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다중 선택 목록</title>
+</head>
+<body>
+    <h2>다중 선택 목록</h2>
+    <form id="myForm">
+        <label for="options">옵션 선택:</label><br>
+        <select id="options" name="options" multiple>
+            <option value="option1">옵션 1</option>
+            <option value="option2">옵션 2</option>
+            <option value="option3">옵션 3</option>
+            <option value="option4">옵션 4</option>
+            <option value="option5">옵션 5</option>
+            <option value="option6">옵션 6</option>
+            <option value="option7">옵션 7</option>
+        </select><br><br>
+
+        <input type="button" value="제출" onclick="displaySelectedOptions()">
+    </form>
+
+    <div id="selectedOptions"></div>
+
+    <script>
+        function displaySelectedOptions() {
+            var selectElement = document.getElementById("options");
+            var selectedOptions = [];
+            for (var i = 0; i < selectElement.options.length; i++) {
+                var option = selectElement.options[i];
+                if (option.selected) {
+                    selectedOptions.push(option.text);
+                }
+            }
+            document.getElementById("selectedOptions").innerHTML = "<h3>선택한 옵션:</h3><p>" + selectedOptions.join(", ") + "</p>";
+        }
+    </script>
+</body>
+</html>
