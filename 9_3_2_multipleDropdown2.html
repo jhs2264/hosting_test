@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다중 선택 목록</title>
+</head>
+<body>
+    <h2>다중 선택 목록</h2>
+    <form id="myForm">
+        <label for="options">옵션 선택:</label><br>
+        <select id="options" name="options" multiple>
+            <option value="option1">옵션 1</option>
+            <option value="option2">옵션 2</option>
+            <option value="option3">옵션 3</option>
+            <option value="option4">옵션 4</option>
+            <option value="option5">옵션 5</option>
+            <option value="option6">옵션 6</option>
+            <option value="option7">옵션 7</option>
+        </select><br><br>
+
+        <input type="button" value="제출" onclick="displaySelectedOptions()">
+    </form>
+
+    <div id="selectedOptions"></div>
+
+    <script>
+        function displaySelectedOptions() {
+            var selectElement = document.getElementById("options");
+            var selectedOptions = [];
+            for (var i = 0; i < selectElement.options.length; i++) {
+                var option = selectElement.options[i];
+                if (option.selected) {
+                    selectedOptions.push(option.text);
+                }
+            }
+            document.getElementById("selectedOptions").innerHTML = "<h3>선택한 옵션:</h3><p>" + selectedOptions.join(", ") + "</p>";
+        }
+    </script>
+</body>
+</html>
