@@ -8,8 +8,8 @@
         .container {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            width: 80%; /* 전체 블록의 가로 길이 줄임 */
+            align-items: flex-start;
+            width: 80%;
             margin: auto;
             margin-top: 50px;
         }
@@ -26,29 +26,37 @@
 
         .draggable {
             cursor: pointer;
-            -webkit-app-region: no-drag; /* 드래그 비활성화 */
+            -webkit-app-region: no-drag;
+            width: 70px; /* 드래그 가능한 블록이 비어있는 블록보다 작아야 합니다. */
+            height: 70px; /* 드래그 가능한 블록이 비어있는 블록보다 작아야 합니다. */
         }
 
         .blocks-container {
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* 왼쪽 정렬 */
+            align-items: center;
         }
 
         .empty-blocks-container {
             display: flex;
             flex-direction: column;
-            align-items: flex-end; /* 오른쪽 정렬 */
+            align-items: center;
         }
 
         .empty-block {
-            width: 100px; /* 기존 크기 유지 */
+            width: 100px;
             height: 100px;
-            background-color: #fff; /* 배경색 화이트 */
+            background-color: #fff;
             border: 2px solid #ccc;
             text-align: center;
             line-height: 100px;
             margin-bottom: 10px;
+        }
+
+        .parent-blocks {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
     </style>
 </head>
@@ -63,13 +71,15 @@
             <div class="block draggable" id="dragE" draggable="true" ondragstart="drag(event)">E</div>
         </div>
         
-        <div class="empty-blocks-container">
-            <!-- 비어있는 블록 -->
-            <div class="empty-block droppable" id="block0" ondrop="drop(event)" ondragover="allowDrop(event)">1</div>
-            <div class="empty-block droppable" id="block1" ondrop="drop(event)" ondragover="allowDrop(event)">2</div>
-            <div class="empty-block droppable" id="block2" ondrop="drop(event)" ondragover="allowDrop(event)">3</div>
-            <div class="empty-block droppable" id="block3" ondrop="drop(event)" ondragover="allowDrop(event)">4</div>
-            <div class="empty-block droppable" id="block4" ondrop="drop(event)" ondragover="allowDrop(event)">5</div>
+        <div class="parent-blocks"> <!-- 부모 블록 추가 -->
+            <div class="empty-blocks-container">
+                <!-- 비어있는 블록 -->
+                <div class="empty-block droppable" id="block0" ondrop="drop(event)" ondragover="allowDrop(event)">1</div>
+                <div class="empty-block droppable" id="block1" ondrop="drop(event)" ondragover="allowDrop(event)">2</div>
+                <div class="empty-block droppable" id="block2" ondrop="drop(event)" ondragover="allowDrop(event)">3</div>
+                <div class="empty-block droppable" id="block3" ondrop="drop(event)" ondragover="allowDrop(event)">4</div>
+                <div class="empty-block droppable" id="block4" ondrop="drop(event)" ondragover="allowDrop(event)">5</div>
+            </div>
         </div>
     </div>
 
