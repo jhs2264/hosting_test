@@ -46,7 +46,7 @@
             text-align: center;
             line-height: 100px;
             margin-bottom: -20px; /* 블록 간격을 겹치게 만듭니다. */
-            position: relative; /* 비어있는 블록을 상대적으로 위치시킵니다. */
+            position: absolute; /* 비어있는 블록을 상대적으로 위치시킵니다. */
         }
     </style>
 </head>
@@ -83,7 +83,7 @@
         function drop(event) {
             event.preventDefault();
             var data = event.dataTransfer.getData("text");
-            event.target.appendChild(document.getElementById(data));
+            event.target.parentNode.insertBefore(document.getElementById(data), event.target.nextSibling);
         }
     </script>
 </body>
