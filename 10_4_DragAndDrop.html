@@ -45,28 +45,8 @@
             border: 2px solid #ccc;
             text-align: center;
             line-height: 100px;
-            margin-bottom: 10px;
-            position: absolute; /* 비어있는 블록을 절대적으로 위치시킵니다. */
-        }
-
-        .empty-block:first-child {
-            top: 0; /* 첫 번째 비어있는 블록은 컨테이너의 맨 위에 위치합니다. */
-        }
-
-        .empty-block:nth-child(2) {
-            top: 120px; /* 두 번째 비어있는 블록은 첫 번째 블록 아래에 위치합니다. */
-        }
-
-        .empty-block:nth-child(3) {
-            top: 240px; /* 세 번째 비어있는 블록은 두 번째 블록 아래에 위치합니다. */
-        }
-
-        .empty-block:nth-child(4) {
-            top: 360px; /* 네 번째 비어있는 블록은 세 번째 블록 아래에 위치합니다. */
-        }
-
-        .empty-block:nth-child(5) {
-            top: 480px; /* 다섯 번째 비어있는 블록은 네 번째 블록 아래에 위치합니다. */
+            margin-bottom: -20px; /* 블록 간격을 겹치게 만듭니다. */
+            position: relative; /* 비어있는 블록을 상대적으로 위치시킵니다. */
         }
     </style>
 </head>
