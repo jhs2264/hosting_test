@@ -3,18 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>입력 상자</title>
+    <title>INPUTBOX</title>
 </head>
 <body>
-    <h2>입력 상자</h2>
-    <form>
+    <h2>INPUTBOX</h2>
+    <form id="myForm">
         <label for="name">이름:</label><br>
-        <input type="text" id="name" name="name" placeholder="name"><br><br>
+        <input type="text" data-testid="name" id="name" name="name" placeholder="아이디를 입력하세요"><br><br>
 
         <label for="password">비밀번호:</label><br>
-        <input type="password" id="password" name="password" placeholder="password"><br><br>
+        <input type="password" data-testid="password" id="password" name="password" placeholder="비밀번호를 입력하세요"><br><br>
 
         <input type="submit" value="제출">
     </form>
+
+    <div id="output"></div>
+    
+    <script>
+        document.getElementById("myForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // 기본 제출 동작 방지
+
+            // 입력된 값 가져오기
+            var name = document.getElementById("name").value;
+            var password = document.getElementById("password").value;
+
+            // 출력할 요소 가져오기
+            var outputDiv = document.getElementById("output");
+
+            // 출력할 내용 설정
+            var outputText = "이름: " + name + "<br>" +
+                             "비밀번호: " + password;
+
+            // 출력하기
+            outputDiv.innerHTML = outputText;
+        });
+    </script>
+    
 </body>
 </html>
