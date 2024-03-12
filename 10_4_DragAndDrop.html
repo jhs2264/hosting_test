@@ -1,90 +1,85 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>드래그 가능한 블록</title>
-    <style>
-        .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            width: 80%;
-            margin: auto;
-            margin-top: 50px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag and Drop Example</title>
+  <style>
+    /* Style for draggable boxes */
+    .draggable {
+      width: 100px;
+      height: 50px;
+      background-color: white;
+      border: 1px solid black;
+      margin: 10px;
+      text-align: center;
+      line-height: 50px;
+      cursor: pointer;
+    }
 
-        .block {
-            width: 100px;
-            height: 100px;
-            background-color: #f0f0f0;
-            border: 2px solid #ccc;
-            text-align: center;
-            line-height: 100px;
-            cursor: pointer;
-        }
-
-        .draggable {
-            cursor: pointer;
-            -webkit-app-region: no-drag;
-            width: 70px; /* 드래그 가능한 블록이 비어있는 블록보다 작아야 합니다. */
-            height: 70px; /* 드래그 가능한 블록이 비어있는 블록보다 작아야 합니다. */
-        }
-
-        .empty-blocks-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative; /* 비어있는 블록을 감싸는 컨테이너를 상대적으로 위치시킵니다. */
-        }
-
-        .empty-block {
-            width: 100px;
-            height: 100px;
-            background-color: #fff;
-            border: 2px solid #ccc;
-            text-align: center;
-            line-height: 100px;
-            margin-bottom: -20px; /* 블록 간격을 겹치게 만듭니다. */
-            position: absolute; /* 비어있는 블록을 상대적으로 위치시킵니다. */
-        }
-    </style>
+    /* Style for drop boxes */
+    .droppable {
+      width: 120px;
+      height: 70px;
+      background-color: lightgray;
+      border: 1px solid black;
+      margin: 10px;
+      text-align: center;
+      line-height: 70px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="blocks-container">
-            <!-- 드래그 가능한 블록 -->
-            <div class="block draggable" id="dragA" draggable="true" ondragstart="drag(event)">A</div>
-            <div class="block draggable" id="dragB" draggable="true" ondragstart="drag(event)">B</div>
-            <div class="block draggable" id="dragC" draggable="true" ondragstart="drag(event)">C</div>
-            <div class="block draggable" id="dragD" draggable="true" ondragstart="drag(event)">D</div>
-            <div class="block draggable" id="dragE" draggable="true" ondragstart="drag(event)">E</div>
-        </div>
-        
-        <div class="empty-blocks-container">
-            <!-- 비어있는 블록 -->
-            <div class="empty-block droppable" id="block0" ondrop="drop(event)" ondragover="allowDrop(event)">1</div>
-            <div class="empty-block droppable" id="block1" ondrop="drop(event)" ondragover="allowDrop(event)">2</div>
-            <div class="empty-block droppable" id="block2" ondrop="drop(event)" ondragover="allowDrop(event)">3</div>
-            <div class="empty-block droppable" id="block3" ondrop="drop(event)" ondragover="allowDrop(event)">4</div>
-            <div class="empty-block droppable" id="block4" ondrop="drop(event)" ondragover="allowDrop(event)">5</div>
-        </div>
-    </div>
+  <!-- Draggable boxes -->
+  <div id="draggableContainer" style="float: left;">
+    <div id="boxA" class="draggable" draggable="true">A</div>
+    <div id="boxB" class="draggable" draggable="true">B</div>
+    <div id="boxC" class="draggable" draggable="true">C</div>
+    <div id="boxD" class="draggable" draggable="true">D</div>
+    <div id="boxE" class="draggable" draggable="true">E</div>
+    <div id="boxF" class="draggable" draggable="true">F</div>
+  </div>
 
-    <script>
-        function allowDrop(event) {
-            event.preventDefault();
-        }
+  <!-- Drop boxes -->
+  <div id="droppableContainer" style="float: right;">
+    <div id="dropBox1" class="droppable">1</div>
+    <div id="dropBox2" class="droppable">2</div>
+    <div id="dropBox3" class="droppable">3</div>
+    <div id="dropBox4" class="droppable">4</div>
+    <div id="dropBox5" class="droppable">5</div>
+    <div id="dropBox6" class="droppable">6</div>
+  </div>
 
-        function drag(event) {
-            event.dataTransfer.setData("text", event.target.id);
-        }
+  <script>
+    // Add event listeners for drag and drop
+    const draggableBoxes = document.querySelectorAll('.draggable');
+    const droppableBoxes = document.querySelectorAll('.droppable');
 
-        function drop(event) {
-            event.preventDefault();
-            var data = event.dataTransfer.getData("text");
-            event.target.parentNode.insertBefore(document.getElementById(data), event.target.nextSibling);
-        }
-    </script>
+    draggableBoxes.forEach(box => {
+      box.addEventListener('dragstart', dragStart);
+    });
+
+    droppableBoxes.forEach(box => {
+      box.addEventListener('dragover', dragOver);
+      box.addEventListener('drop', drop);
+    });
+
+    let draggedBox = null;
+
+    function dragStart(event) {
+      draggedBox = event.target;
+    }
+
+    function dragOver(event) {
+      event.preventDefault();
+    }
+
+    function drop(event) {
+      event.preventDefault();
+      if (event.target.classList.contains('droppable') && event.target.children.length === 0) {
+        event.target.appendChild(draggedBox.cloneNode(true));
+      }
+    }
+  </script>
 </body>
 </html>
