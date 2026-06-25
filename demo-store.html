@@ -667,10 +667,6 @@
     <section class="modal" id="modalContent"></section>
   </div>
 
-  <div class="modal-backdrop" id="alertBackdrop" role="alertdialog" aria-modal="true">
-    <section class="modal" id="alertContent"></section>
-  </div>
-
   <div class="toast" id="toast" role="status"></div>
 
   <script>
@@ -771,8 +767,6 @@
       slideDots: document.getElementById('slideDots'),
       modalBackdrop: document.getElementById('modalBackdrop'),
       modalContent: document.getElementById('modalContent'),
-      alertBackdrop: document.getElementById('alertBackdrop'),
-      alertContent: document.getElementById('alertContent'),
       toast: document.getElementById('toast'),
       cartCount: document.getElementById('cartCount'),
       welcomeUser: document.getElementById('welcomeUser'),
@@ -1108,12 +1102,7 @@
 
     function openAlert(message) {
       els.toast.classList.remove('show');
-      els.alertContent.innerHTML = modalTemplate('Notice', `<p>${message}</p>`, '<button class="btn primary" data-alert-close>OK</button>');
-      els.alertBackdrop.classList.add('open');
-    }
-
-    function closeAlert() {
-      els.alertBackdrop.classList.remove('open');
+      window.alert(message);
     }
 
     function updateAuth() {
@@ -1235,14 +1224,7 @@
         showToast('Logged out');
       }
       if (modal) openModal(modal);
-      if (target.dataset.close !== undefined) {
-        if (target.closest('#alertBackdrop')) {
-          closeAlert();
-        } else {
-          closeModal();
-        }
-      }
-      if (target.dataset.alertClose !== undefined) closeAlert();
+      if (target.dataset.close !== undefined) closeModal();
       if (category) {
         state.category = category;
         state.page = 0;
@@ -1270,13 +1252,6 @@
     });
     els.modalBackdrop.addEventListener('pointerup', (event) => {
       if (startedOutsideModal && event.target === els.modalBackdrop) closeModal();
-      startedOutsideModal = false;
-    });
-    els.alertBackdrop.addEventListener('pointerdown', (event) => {
-      startedOutsideModal = event.target === els.alertBackdrop;
-    });
-    els.alertBackdrop.addEventListener('pointerup', (event) => {
-      if (startedOutsideModal && event.target === els.alertBackdrop) closeAlert();
       startedOutsideModal = false;
     });
 
