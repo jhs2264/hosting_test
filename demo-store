@@ -775,8 +775,99 @@
       signupNav: document.getElementById('signupNav')
     };
 
+    const storageKeys = {
+      users: 'demoStoreUsers',
+      currentUser: 'demoStoreCurrentUser',
+      guestCart: 'demoStoreGuestCart'
+    };
+
     function money(value) {
       return `$${value}`;
+    }
+
+    function readStorage(key, fallback) {
+      try {
+        const value = localStorage.getItem(key);
+        return value ? JSON.parse(value) : fallback;
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function writeStorage(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function userKey(username) {
+      return username.trim().toLowerCase();
+    }
+
+    function cartKey(username) {
+      return username ? `demoStoreCart:${userKey(username)}` : storageKeys.guestCart;
+    }
+
+    function loadUsers() {
+      return readStorage(storageKeys.users, {});
+    }
+
+    function saveUsers(users) {
+      writeStorage(storageKeys.users, users);
+    }
+
+    function simplifyCart(cart) {
+      return cart.map((item) => ({
+        id: item.id,
+        quantity: item.quantity
+      }));
+    }
+
+    function hydrateCart(savedCart) {
+      return savedCart
+        .map((savedItem) => {
+          const product = products.find((item) => item.id === savedItem.id);
+          if (!product) return null;
+          return {
+            ...product,
+            quantity: Math.max(Number(savedItem.quantity) || 1, 1)
+          };
+        })
+        .filter(Boolean);
+    }
+
+    function loadCart(username = state.user) {
+      return hydrateCart(readStorage(cartKey(username), []));
+    }
+
+    function saveCart(username = state.user) {
+      writeStorage(cartKey(username), simplifyCart(state.cart));
+    }
+
+    function mergeCarts(baseCart, addedCart) {
+      const merged = [...baseCart.map((item) => ({ ...item }))];
+      addedCart.forEach((item) => {
+        const existing = merged.find((cartItem) => cartItem.id === item.id);
+        if (existing) {
+          existing.quantity += item.quantity;
+        } else {
+          merged.push({ ...item });
+        }
+      });
+      return merged;
+    }
+
+    function initializeSession() {
+      const users = loadUsers();
+      const currentUserKey = localStorage.getItem(storageKeys.currentUser);
+      const currentUser = currentUserKey ? users[currentUserKey] : null;
+
+      if (currentUser) {
+        state.user = currentUser.username;
+        state.cart = loadCart(state.user);
+      } else {
+        localStorage.removeItem(storageKeys.currentUser);
+        state.user = '';
+        state.cart = loadCart('');
+      }
     }
 
     function filteredProducts() {
@@ -873,12 +964,14 @@
       } else {
         state.cart.push({ ...product, quantity: 1 });
       }
+      saveCart();
       updateCartCount();
       showToast(`${product.name} added to cart`);
     }
 
     function removeFromCart(productId) {
       state.cart = state.cart.filter((item) => item.id !== productId);
+      saveCart();
       updateCartCount();
       renderCart();
     }
@@ -1017,20 +1110,64 @@
     function submitModal(type) {
       if (type === 'login') {
         const name = document.getElementById('loginUser').value.trim();
+        const password = document.getElementById('loginPass').value;
+        const users = loadUsers();
+        const account = users[userKey(name)];
+
         if (!name) {
           showToast('Enter a username');
           return;
         }
+        if (!account) {
+          showToast('User not found');
+          return;
+        }
+        if (account.password !== password) {
+          showToast('Wrong password');
+          return;
+        }
+
+        saveCart();
+        const guestCart = state.user ? [] : loadCart('');
         state.user = name;
+        localStorage.setItem(storageKeys.currentUser, userKey(name));
+        state.cart = mergeCarts(loadCart(name), guestCart);
+        saveCart(name);
+        localStorage.removeItem(storageKeys.guestCart);
         updateAuth();
+        updateCartCount();
         closeModal();
         showToast(`Logged in as ${name}`);
       }
 
       if (type === 'signup') {
         const name = document.getElementById('signupUser').value.trim();
+        const password = document.getElementById('signupPass').value;
+        const users = loadUsers();
+
+        if (!name) {
+          showToast('Enter a username');
+          return;
+        }
+        if (!password) {
+          showToast('Enter a password');
+          return;
+        }
+        if (users[userKey(name)]) {
+          showToast('Username already exists');
+          return;
+        }
+
+        users[userKey(name)] = {
+          username: name,
+          password
+        };
+        saveUsers(users);
+        if (!localStorage.getItem(cartKey(name))) {
+          writeStorage(cartKey(name), []);
+        }
         closeModal();
-        showToast(name ? `Account created for ${name}` : 'Account created');
+        showToast(`Account created for ${name}`);
       }
 
       if (type === 'contact') {
@@ -1045,6 +1182,7 @@
           return;
         }
         state.cart = [];
+        saveCart();
         updateCartCount();
         closeModal();
         renderCart();
@@ -1071,8 +1209,12 @@
       }
       if (action === 'cart') renderCart();
       if (action === 'logout') {
+        saveCart();
         state.user = '';
+        state.cart = loadCart('');
+        localStorage.removeItem(storageKeys.currentUser);
         updateAuth();
+        updateCartCount();
         showToast('Logged out');
       }
       if (modal) openModal(modal);
@@ -1103,6 +1245,7 @@
       if (event.target === els.modalBackdrop) closeModal();
     });
 
+    initializeSession();
     renderDots();
     renderProducts();
     updateCartCount();
