@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Store</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #222;
+      background: #fff;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      min-height: 58px;
+      padding: 0 42px;
+      background: #2f343a;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-right: 34px;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 5px;
+      background: #0f8f83;
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      flex: 1;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav button {
+      min-height: 58px;
+      padding: 0 13px;
+      border: 0;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .username {
+      display: none;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .hero {
+      position: relative;
+      height: 325px;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-items: center;
+      padding: 0 10%;
+      opacity: 0;
+      transition: opacity 400ms ease;
+      color: #fff;
+      background-position: center;
+      background-size: cover;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.1));
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide-copy {
+      position: relative;
+      width: min(500px, 86vw);
+    }
+
+    .slide-copy h1 {
+      margin: 0 0 12px;
+      font-size: 42px;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .slide-copy p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      z-index: 3;
+      width: 42px;
+      height: 56px;
+      border: 0;
+      background: rgba(0, 0, 0, 0.34);
+      color: #fff;
+      font-size: 34px;
+      transform: translateY(-50%);
+    }
+
+    .carousel-btn:hover {
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .carousel-btn.prev {
+      left: 14px;
+    }
+
+    .carousel-btn.next {
+      right: 14px;
+    }
+
+    .dots {
+      position: absolute;
+      right: 0;
+      bottom: 18px;
+      left: 0;
+      z-index: 3;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      background: transparent;
+      padding: 0;
+    }
+
+    .dot.active {
+      background: #fff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 30px;
+      width: min(1120px, calc(100% - 42px));
+      margin: 28px auto 42px;
+    }
+
+    .categories h2 {
+      margin: 0;
+      padding: 12px 16px;
+      border-radius: 4px 4px 0 0;
+      background: #1f6f99;
+      color: #fff;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .category-list {
+      display: grid;
+      border: 1px solid #d8d8d8;
+      border-top: 0;
+      border-radius: 0 0 4px 4px;
+      overflow: hidden;
+    }
+
+    .category-list button {
+      min-height: 48px;
+      border: 0;
+      border-bottom: 1px solid #e5e5e5;
+      background: #fff;
+      color: #1f6f99;
+      text-align: left;
+      padding: 0 16px;
+      font-size: 17px;
+    }
+
+    .category-list button:last-child {
+      border-bottom: 0;
+    }
+
+    .category-list button:hover,
+    .category-list button.active {
+      background: #f0f7fb;
+      color: #174f6c;
+      font-weight: 700;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .product-card {
+      display: grid;
+      grid-template-rows: 190px auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .card-body h3 {
+      margin: 0 0 8px;
+      color: #1f6f99;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .price {
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .description {
+      margin: 0 0 16px;
+      min-height: 58px;
+      color: #555;
+      line-height: 1.45;
+    }
+
+    .pager {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 28px 0 0;
+    }
+
+    .btn {
+      min-height: 38px;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      padding: 0 14px;
+      background: #fff;
+      color: #333;
+    }
+
+    .btn:hover {
+      background: #f4f4f4;
+    }
+
+    .btn.primary {
+      border-color: #1f6f99;
+      background: #1f6f99;
+      color: #fff;
+    }
+
+    .btn.primary:hover {
+      background: #185878;
+    }
+
+    .btn.success {
+      border-color: #27864d;
+      background: #27864d;
+      color: #fff;
+    }
+
+    .btn.success:hover {
+      background: #1f6a3d;
+    }
+
+    .btn.danger {
+      border-color: #b94242;
+      background: #b94242;
+      color: #fff;
+    }
+
+    .detail-view,
+    .cart-view {
+      display: none;
+      width: min(1120px, calc(100% - 42px));
+      margin: 32px auto 46px;
+    }
+
+    .detail-card {
+      display: grid;
+      grid-template-columns: minmax(290px, 44%) 1fr;
+      gap: 34px;
+      align-items: start;
+    }
+
+    .detail-card img {
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .detail-info h1 {
+      margin: 0 0 12px;
+      font-size: 32px;
+      line-height: 1.15;
+    }
+
+    .detail-info .price {
+      font-size: 24px;
+    }
+
+    .detail-info p {
+      color: #444;
+      line-height: 1.55;
+    }
+
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 22px;
+    }
+
+    .cart-table th,
+    .cart-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .cart-table img {
+      width: 78px;
+      height: 58px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .cart-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .total {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .footer {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      padding: 30px 42px;
+      background: #f5f5f5;
+      border-top: 1px solid #ddd;
+    }
+
+    .footer h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .footer p {
+      margin: 6px 0;
+      color: #555;
+      line-height: 1.45;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 54px 18px;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      width: min(500px, 100%);
+      border-radius: 5px;
+      background: #fff;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.34);
+    }
+
+    .modal-header,
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid #e2e2e2;
+    }
+
+    .modal-footer {
+      justify-content: flex-end;
+      gap: 10px;
+      border-top: 1px solid #e2e2e2;
+      border-bottom: 0;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .close {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      background: transparent;
+      color: #777;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 14px;
+    }
+
+    label {
+      font-weight: 700;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px 11px;
+    }
+
+    textarea {
+      min-height: 105px;
+      resize: vertical;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 70;
+      display: none;
+      max-width: 320px;
+      padding: 14px 16px;
+      border-radius: 4px;
+      background: #222;
+      color: #fff;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    @media (max-width: 850px) {
+      .topbar {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 0 18px 8px;
+      }
+
+      .brand {
+        min-height: 58px;
+      }
+
+      .nav {
+        flex-wrap: wrap;
+      }
+
+      .nav button {
+        min-height: 40px;
+      }
+
+      .hero {
+        height: 300px;
+      }
+
+      .slide-copy h1 {
+        font-size: 34px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .detail-card,
+      .footer {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-table th:nth-child(1),
+      .cart-table td:nth-child(1) {
+        display: none;
+      }
+
+      .cart-footer {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" data-action="home">
+      <span class="brand-mark">D</span>
+      Demo Store
+    </a>
+    <nav class="nav" aria-label="Main navigation">
+      <button class="active" data-action="home">Home</button>
+      <button data-modal="contact">Contact</button>
+      <button data-modal="about">About us</button>
+      <button data-action="cart">Cart <span id="cartCount"></span></button>
+      <button id="loginNav" data-modal="login">Log in</button>
+      <button id="logoutNav" style="display:none" data-action="logout">Log out</button>
+      <button id="signupNav" data-modal="signup">Sign up</button>
+    </nav>
+    <div class="user-area">
+      <span id="welcomeUser" class="username"></span>
+    </div>
+  </header>
+
+  <section id="homeView">
+    <section class="hero" aria-label="Featured products">
+      <article class="slide active" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80')">
+        <div class="slide-copy">
+          <h1>Devices for everyday testing</h1>
+          <p>Browse phones, laptops, and monitors in a compact demo storefront with real cart behavior.</p>
+        </div>
+      </article>
+      <article class="slide" style="background-image:url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1400&q=80')">
+        <div class="slide-copy">
+          <h1>Laptops ready for work</h1>
+          <p>Switch categories, inspect product details, and add items to your cart without leaving the page.</p>
+        </div>
+      </article>
+      <article class="slide" style="background-image:url('https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=1400&q=80')">
+        <div class="slide-copy">
+          <h1>Clear views for every desk</h1>
+          <p>A clean e-commerce practice app inspired by classic demo-store workflows.</p>
+        </div>
+      </article>
+      <button class="carousel-btn prev" id="prevSlide" aria-label="Previous slide">&lsaquo;</button>
+      <button class="carousel-btn next" id="nextSlide" aria-label="Next slide">&rsaquo;</button>
+      <div class="dots" id="slideDots" aria-hidden="true"></div>
+    </section>
+
+    <div class="layout">
+      <aside class="categories">
+        <h2>CATEGORIES</h2>
+        <div class="category-list" id="categoryList"></div>
+      </aside>
+
+      <main>
+        <div class="product-grid" id="productGrid"></div>
+        <div class="pager">
+          <button class="btn" id="prevPage">Previous</button>
+          <button class="btn" id="nextPage">Next</button>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section id="detailView" class="detail-view"></section>
+  <section id="cartView" class="cart-view"></section>
+
+  <footer class="footer">
+    <section>
+      <h3>About Us</h3>
+      <p>We build practical demo stores for testing, training, and learning front-end automation workflows.</p>
+    </section>
+    <section>
+      <h3>Get in Touch</h3>
+      <p>Address: 2390 El Camino Real</p>
+      <p>Phone: +440 123456</p>
+      <p>Email: demo@example.com</p>
+    </section>
+    <section>
+      <h3>Demo Store</h3>
+      <p>A self-contained storefront with categories, cart, modals, and checkout interactions.</p>
+    </section>
+  </footer>
+
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true">
+    <section class="modal" id="modalContent"></section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const products = [
+      {
+        id: 1,
+        name: 'Nova Phone X',
+        category: 'Phones',
+        price: 360,
+        image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80',
+        description: 'A fast everyday smartphone with a bright display, compact body, and generous battery life.'
+      },
+      {
+        id: 2,
+        name: 'Pixel Note 9',
+        category: 'Phones',
+        price: 440,
+        image: 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=800&q=80',
+        description: 'A large-screen phone made for streaming, notes, quick photos, and daily browsing.'
+      },
+      {
+        id: 3,
+        name: 'Astra Mini',
+        category: 'Phones',
+        price: 260,
+        image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=80',
+        description: 'A lightweight phone with dependable performance and a clean modern design.'
+      },
+      {
+        id: 4,
+        name: 'ForgeBook Pro',
+        category: 'Laptops',
+        price: 790,
+        image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80',
+        description: 'A slim laptop for development, school, remote work, and travel.'
+      },
+      {
+        id: 5,
+        name: 'Summit Laptop 14',
+        category: 'Laptops',
+        price: 910,
+        image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
+        description: 'A premium notebook with a crisp display, quiet keyboard, and reliable all-day speed.'
+      },
+      {
+        id: 6,
+        name: 'StudioBook Air',
+        category: 'Laptops',
+        price: 680,
+        image: 'https://images.unsplash.com/photo-1484788984921-03950022c9ef?auto=format&fit=crop&w=800&q=80',
+        description: 'Portable performance for documents, design reviews, and everyday web apps.'
+      },
+      {
+        id: 7,
+        name: 'WideView 27',
+        category: 'Monitors',
+        price: 310,
+        image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80',
+        description: 'A sharp 27-inch display with roomy workspace for dashboards and spreadsheets.'
+      },
+      {
+        id: 8,
+        name: 'CurveDesk 32',
+        category: 'Monitors',
+        price: 470,
+        image: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=800&q=80',
+        description: 'A curved monitor for multitasking, presentations, and immersive desk setups.'
+      },
+      {
+        id: 9,
+        name: 'Focus Panel 24',
+        category: 'Monitors',
+        price: 220,
+        image: 'https://images.unsplash.com/photo-1547082299-de196ea013d6?auto=format&fit=crop&w=800&q=80',
+        description: 'A compact monitor for home offices, testing stations, and second-screen workflows.'
+      }
+    ];
+
+    const categories = ['All', 'Phones', 'Laptops', 'Monitors'];
+    const state = {
+      category: 'All',
+      page: 0,
+      perPage: 6,
+      slide: 0,
+      cart: [],
+      user: ''
+    };
+
+    const els = {
+      homeView: document.getElementById('homeView'),
+      detailView: document.getElementById('detailView'),
+      cartView: document.getElementById('cartView'),
+      categoryList: document.getElementById('categoryList'),
+      productGrid: document.getElementById('productGrid'),
+      prevPage: document.getElementById('prevPage'),
+      nextPage: document.getElementById('nextPage'),
+      slides: Array.from(document.querySelectorAll('.slide')),
+      slideDots: document.getElementById('slideDots'),
+      modalBackdrop: document.getElementById('modalBackdrop'),
+      modalContent: document.getElementById('modalContent'),
+      toast: document.getElementById('toast'),
+      cartCount: document.getElementById('cartCount'),
+      welcomeUser: document.getElementById('welcomeUser'),
+      loginNav: document.getElementById('loginNav'),
+      logoutNav: document.getElementById('logoutNav'),
+      signupNav: document.getElementById('signupNav')
+    };
+
+    function money(value) {
+      return `$${value}`;
+    }
+
+    function filteredProducts() {
+      if (state.category === 'All') {
+        return products;
+      }
+      return products.filter((product) => product.category === state.category);
+    }
+
+    function showToast(message) {
+      els.toast.textContent = message;
+      els.toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => {
+        els.toast.classList.remove('show');
+      }, 2200);
+    }
+
+    function setActiveNav(name) {
+      document.querySelectorAll('.nav button').forEach((button) => {
+        button.classList.toggle('active', button.dataset.action === name);
+      });
+    }
+
+    function showHome() {
+      els.homeView.style.display = '';
+      els.detailView.style.display = 'none';
+      els.cartView.style.display = 'none';
+      setActiveNav('home');
+      renderProducts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showDetail(productId) {
+      const product = products.find((item) => item.id === productId);
+      if (!product) return;
+
+      els.homeView.style.display = 'none';
+      els.cartView.style.display = 'none';
+      els.detailView.style.display = 'block';
+      setActiveNav('');
+      els.detailView.innerHTML = `
+        <div class="detail-card">
+          <img src="${product.image}" alt="${product.name}">
+          <div class="detail-info">
+            <h1>${product.name}</h1>
+            <p class="price">${money(product.price)}</p>
+            <p>${product.description}</p>
+            <p>This detail page mirrors a typical product-store flow: review the item, add it to your cart, then continue shopping or check out.</p>
+            <button class="btn success" data-add="${product.id}">Add to cart</button>
+            <button class="btn" data-action="home">Back to store</button>
+          </div>
+        </div>
+      `;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderCategories() {
+      els.categoryList.innerHTML = categories.map((category) => `
+        <button class="${state.category === category ? 'active' : ''}" data-category="${category}">${category}</button>
+      `).join('');
+    }
+
+    function renderProducts() {
+      renderCategories();
+      const items = filteredProducts();
+      const pageCount = Math.ceil(items.length / state.perPage);
+      state.page = Math.min(state.page, Math.max(pageCount - 1, 0));
+      const pageItems = items.slice(state.page * state.perPage, (state.page + 1) * state.perPage);
+
+      els.productGrid.innerHTML = pageItems.map((product) => `
+        <article class="product-card">
+          <img src="${product.image}" alt="${product.name}">
+          <div class="card-body">
+            <h3>${product.name}</h3>
+            <p class="price">${money(product.price)}</p>
+            <p class="description">${product.description}</p>
+            <button class="btn primary" data-detail="${product.id}">View details</button>
+          </div>
+        </article>
+      `).join('');
+
+      els.prevPage.disabled = state.page === 0;
+      els.nextPage.disabled = state.page >= pageCount - 1;
+    }
+
+    function addToCart(productId) {
+      const product = products.find((item) => item.id === productId);
+      const existing = state.cart.find((item) => item.id === productId);
+      if (!product) return;
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        state.cart.push({ ...product, quantity: 1 });
+      }
+      updateCartCount();
+      showToast(`${product.name} added to cart`);
+    }
+
+    function removeFromCart(productId) {
+      state.cart = state.cart.filter((item) => item.id !== productId);
+      updateCartCount();
+      renderCart();
+    }
+
+    function cartTotal() {
+      return state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    }
+
+    function updateCartCount() {
+      const count = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+      els.cartCount.textContent = count ? `(${count})` : '';
+    }
+
+    function renderCart() {
+      els.homeView.style.display = 'none';
+      els.detailView.style.display = 'none';
+      els.cartView.style.display = 'block';
+      setActiveNav('cart');
+
+      if (!state.cart.length) {
+        els.cartView.innerHTML = `
+          <h1>Cart</h1>
+          <p>Your cart is empty.</p>
+          <button class="btn primary" data-action="home">Continue shopping</button>
+        `;
+        return;
+      }
+
+      els.cartView.innerHTML = `
+        <h1>Cart</h1>
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${state.cart.map((item) => `
+              <tr>
+                <td><img src="${item.image}" alt="${item.name}"></td>
+                <td>${item.name}</td>
+                <td>${money(item.price)}</td>
+                <td>${item.quantity}</td>
+                <td><button class="btn danger" data-remove="${item.id}">Delete</button></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div class="cart-footer">
+          <div class="total">Total: ${money(cartTotal())}</div>
+          <div>
+            <button class="btn" data-action="home">Continue shopping</button>
+            <button class="btn success" data-modal="order">Place Order</button>
+          </div>
+        </div>
+      `;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setSlide(index) {
+      state.slide = (index + els.slides.length) % els.slides.length;
+      els.slides.forEach((slide, idx) => slide.classList.toggle('active', idx === state.slide));
+      document.querySelectorAll('.dot').forEach((dot, idx) => dot.classList.toggle('active', idx === state.slide));
+    }
+
+    function renderDots() {
+      els.slideDots.innerHTML = els.slides.map((_, index) => `
+        <button class="dot ${index === 0 ? 'active' : ''}" data-slide="${index}" aria-label="Go to slide ${index + 1}"></button>
+      `).join('');
+    }
+
+    function modalTemplate(title, body, footer = '') {
+      return `
+        <div class="modal-header">
+          <h2 class="modal-title">${title}</h2>
+          <button class="close" data-close aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">${body}</div>
+        <div class="modal-footer">
+          <button class="btn" data-close>Close</button>
+          ${footer}
+        </div>
+      `;
+    }
+
+    function openModal(name) {
+      const templates = {
+        contact: modalTemplate('New message', `
+          <div class="form-row"><label>Contact Email:</label><input id="contactEmail" type="email"></div>
+          <div class="form-row"><label>Contact Name:</label><input id="contactName" type="text"></div>
+          <div class="form-row"><label>Message:</label><textarea id="contactMessage"></textarea></div>
+        `, '<button class="btn primary" data-submit="contact">Send message</button>'),
+        about: modalTemplate('About us', `
+          <p>This app is a clean practice storefront based on familiar demo-commerce patterns.</p>
+          <p>Use it to test navigation, modals, category filtering, product details, cart operations, and checkout forms.</p>
+        `),
+        signup: modalTemplate('Sign up', `
+          <div class="form-row"><label>Username:</label><input id="signupUser" type="text"></div>
+          <div class="form-row"><label>Password:</label><input id="signupPass" type="password"></div>
+        `, '<button class="btn primary" data-submit="signup">Sign up</button>'),
+        login: modalTemplate('Log in', `
+          <div class="form-row"><label>Username:</label><input id="loginUser" type="text"></div>
+          <div class="form-row"><label>Password:</label><input id="loginPass" type="password"></div>
+        `, '<button class="btn primary" data-submit="login">Log in</button>'),
+        order: modalTemplate('Place order', `
+          <div class="form-row"><label>Name:</label><input id="orderName" type="text"></div>
+          <div class="form-row"><label>Country:</label><input id="orderCountry" type="text"></div>
+          <div class="form-row"><label>City:</label><input id="orderCity" type="text"></div>
+          <div class="form-row"><label>Credit card:</label><input id="orderCard" type="text"></div>
+          <div class="form-row"><label>Month:</label><input id="orderMonth" type="text"></div>
+          <div class="form-row"><label>Year:</label><input id="orderYear" type="text"></div>
+          <p class="price">Total: ${money(cartTotal())}</p>
+        `, '<button class="btn success" data-submit="order">Purchase</button>')
+      };
+
+      els.modalContent.innerHTML = templates[name] || '';
+      els.modalBackdrop.classList.add('open');
+    }
+
+    function closeModal() {
+      els.modalBackdrop.classList.remove('open');
+    }
+
+    function updateAuth() {
+      els.welcomeUser.textContent = state.user ? `Welcome ${state.user}` : '';
+      els.welcomeUser.style.display = state.user ? 'inline' : 'none';
+      els.loginNav.style.display = state.user ? 'none' : '';
+      els.signupNav.style.display = state.user ? 'none' : '';
+      els.logoutNav.style.display = state.user ? '' : 'none';
+    }
+
+    function submitModal(type) {
+      if (type === 'login') {
+        const name = document.getElementById('loginUser').value.trim();
+        if (!name) {
+          showToast('Enter a username');
+          return;
+        }
+        state.user = name;
+        updateAuth();
+        closeModal();
+        showToast(`Logged in as ${name}`);
+      }
+
+      if (type === 'signup') {
+        const name = document.getElementById('signupUser').value.trim();
+        closeModal();
+        showToast(name ? `Account created for ${name}` : 'Account created');
+      }
+
+      if (type === 'contact') {
+        closeModal();
+        showToast('Message sent');
+      }
+
+      if (type === 'order') {
+        if (!state.cart.length) {
+          closeModal();
+          showToast('Your cart is empty');
+          return;
+        }
+        state.cart = [];
+        updateCartCount();
+        closeModal();
+        renderCart();
+        showToast('Thank you for your purchase');
+      }
+    }
+
+    document.addEventListener('click', (event) => {
+      const target = event.target.closest('button, a');
+      if (!target) return;
+
+      const action = target.dataset.action;
+      const modal = target.dataset.modal;
+      const category = target.dataset.category;
+      const detailId = Number(target.dataset.detail);
+      const addId = Number(target.dataset.add);
+      const removeId = Number(target.dataset.remove);
+      const slideIndex = Number(target.dataset.slide);
+      const submit = target.dataset.submit;
+
+      if (action === 'home') {
+        event.preventDefault();
+        showHome();
+      }
+      if (action === 'cart') renderCart();
+      if (action === 'logout') {
+        state.user = '';
+        updateAuth();
+        showToast('Logged out');
+      }
+      if (modal) openModal(modal);
+      if (target.dataset.close !== undefined) closeModal();
+      if (category) {
+        state.category = category;
+        state.page = 0;
+        renderProducts();
+      }
+      if (detailId) showDetail(detailId);
+      if (addId) addToCart(addId);
+      if (removeId) removeFromCart(removeId);
+      if (!Number.isNaN(slideIndex)) setSlide(slideIndex);
+      if (submit) submitModal(submit);
+    });
+
+    document.getElementById('prevSlide').addEventListener('click', () => setSlide(state.slide - 1));
+    document.getElementById('nextSlide').addEventListener('click', () => setSlide(state.slide + 1));
+    els.prevPage.addEventListener('click', () => {
+      state.page -= 1;
+      renderProducts();
+    });
+    els.nextPage.addEventListener('click', () => {
+      state.page += 1;
+      renderProducts();
+    });
+    els.modalBackdrop.addEventListener('click', (event) => {
+      if (event.target === els.modalBackdrop) closeModal();
+    });
+
+    renderDots();
+    renderProducts();
+    updateCartCount();
+    updateAuth();
+    window.setInterval(() => setSlide(state.slide + 1), 5500);
+  </script>
+</body>
+</html>
