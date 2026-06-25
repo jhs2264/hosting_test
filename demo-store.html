@@ -667,6 +667,10 @@
     <section class="modal" id="modalContent"></section>
   </div>
 
+  <div class="modal-backdrop" id="alertBackdrop" role="alertdialog" aria-modal="true">
+    <section class="modal" id="alertContent"></section>
+  </div>
+
   <div class="toast" id="toast" role="status"></div>
 
   <script>
@@ -767,6 +771,8 @@
       slideDots: document.getElementById('slideDots'),
       modalBackdrop: document.getElementById('modalBackdrop'),
       modalContent: document.getElementById('modalContent'),
+      alertBackdrop: document.getElementById('alertBackdrop'),
+      alertContent: document.getElementById('alertContent'),
       toast: document.getElementById('toast'),
       cartCount: document.getElementById('cartCount'),
       welcomeUser: document.getElementById('welcomeUser'),
@@ -774,6 +780,7 @@
       logoutNav: document.getElementById('logoutNav'),
       signupNav: document.getElementById('signupNav')
     };
+    let startedOutsideModal = false;
 
     const storageKeys = {
       users: 'demoStoreUsers',
@@ -1099,6 +1106,16 @@
       els.modalBackdrop.classList.remove('open');
     }
 
+    function openAlert(message) {
+      els.toast.classList.remove('show');
+      els.alertContent.innerHTML = modalTemplate('Notice', `<p>${message}</p>`, '<button class="btn primary" data-alert-close>OK</button>');
+      els.alertBackdrop.classList.add('open');
+    }
+
+    function closeAlert() {
+      els.alertBackdrop.classList.remove('open');
+    }
+
     function updateAuth() {
       els.welcomeUser.textContent = state.user ? `Welcome ${state.user}` : '';
       els.welcomeUser.style.display = state.user ? 'inline' : 'none';
@@ -1115,15 +1132,15 @@
         const account = users[userKey(name)];
 
         if (!name) {
-          showToast('Enter a username');
+          openAlert('Enter a username');
           return;
         }
         if (!account) {
-          showToast('User not found');
+          openAlert('User not found');
           return;
         }
         if (account.password !== password) {
-          showToast('Wrong password');
+          openAlert('Wrong password');
           return;
         }
 
@@ -1146,15 +1163,15 @@
         const users = loadUsers();
 
         if (!name) {
-          showToast('Enter a username');
+          openAlert('Enter a username');
           return;
         }
         if (!password) {
-          showToast('Enter a password');
+          openAlert('Enter a password');
           return;
         }
         if (users[userKey(name)]) {
-          showToast('Username already exists');
+          openAlert('Username already exists');
           return;
         }
 
@@ -1218,7 +1235,14 @@
         showToast('Logged out');
       }
       if (modal) openModal(modal);
-      if (target.dataset.close !== undefined) closeModal();
+      if (target.dataset.close !== undefined) {
+        if (target.closest('#alertBackdrop')) {
+          closeAlert();
+        } else {
+          closeModal();
+        }
+      }
+      if (target.dataset.alertClose !== undefined) closeAlert();
       if (category) {
         state.category = category;
         state.page = 0;
@@ -1241,8 +1265,19 @@
       state.page += 1;
       renderProducts();
     });
-    els.modalBackdrop.addEventListener('click', (event) => {
-      if (event.target === els.modalBackdrop) closeModal();
+    els.modalBackdrop.addEventListener('pointerdown', (event) => {
+      startedOutsideModal = event.target === els.modalBackdrop;
+    });
+    els.modalBackdrop.addEventListener('pointerup', (event) => {
+      if (startedOutsideModal && event.target === els.modalBackdrop) closeModal();
+      startedOutsideModal = false;
+    });
+    els.alertBackdrop.addEventListener('pointerdown', (event) => {
+      startedOutsideModal = event.target === els.alertBackdrop;
+    });
+    els.alertBackdrop.addEventListener('pointerup', (event) => {
+      if (startedOutsideModal && event.target === els.alertBackdrop) closeAlert();
+      startedOutsideModal = false;
     });
 
     initializeSession();
