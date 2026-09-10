@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nopCommerce demo store. Register</title>
+  <style>
+*{box-sizing:border-box}body{margin:0;font:14px Arial,Helvetica,sans-serif;color:#444;background:#fff}a{color:inherit;text-decoration:none}a:hover{color:#4ab2f1}button,input{font:inherit}button{cursor:pointer}input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #248ece;outline-offset:3px}.hidden{display:none!important}
+.bar-notification{display:none;position:fixed;inset:0 0 auto;z-index:20;padding:15px;background:#4bb07a;color:#fff;text-align:center}.master-wrapper-page{min-height:100vh}.admin-header-links{display:none}.header{width:min(1200px,95%);margin:auto}.header-upper{min-height:65px;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:flex-end}.header-links ul{display:flex;gap:24px;align-items:center;list-style:none;margin:0;padding:0}.ico-cart{display:inline-block;background:#f6f6f6;padding:15px 20px}.header-lower{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:35px 0}.header-logo a{display:inline-block;color:#444;font-size:36px;font-weight:700;letter-spacing:-1.5px}.header-logo span{color:#4ab2f1}.header-logo small{display:block;text-align:right;font-size:13px;letter-spacing:1px;font-weight:400;color:#777}.search-box form{display:flex}.search-box input{width:280px;height:40px;border:1px solid #ddd;padding:8px;color:#777}.button-1{border:0;background:#4ab2f1;color:white;padding:12px 30px;min-height:40px;font-size:15px;font-weight:400;text-transform:uppercase}.button-1:hover{background:#248ece}.header-menu{width:min(1200px,95%);margin:0 auto 30px;border-top:1px solid #ddd;border-bottom:1px solid #ddd}.header-menu ul{display:flex;flex-wrap:wrap;justify-content:center;gap:35px;list-style:none;margin:0;padding:20px}.header-menu a{font-size:18px}.master-wrapper-content{width:min(1200px,95%);margin:0 auto;padding:0 0 100px}.page{min-height:200px;text-align:center}.page-title{min-height:50px;margin:0 0 25px;padding:6px 10px;border-bottom:1px solid #ddd}.page-title h1{margin:0;font-size:30px;font-weight:400}.fieldset{margin:0 0 40px}.fieldset .title{margin:0 0 15px;padding:0 10px;font-size:20px}.fieldset strong{font-weight:400}.form-fields{border-top:1px solid #e6e6e6;background:#f9f9f9;padding:30px 15px}.inputs{display:grid;grid-template-columns: minmax(140px,375px) minmax(180px,400px) 12px;gap:0 10px;align-items:center;margin:0 0 15px;text-align:left}.inputs:last-child{margin-bottom:0}.inputs>label{text-align:right}.inputs input[type=text],.inputs input[type=email],.inputs input[type=password]{width:100%;height:40px;padding:8px;border:1px solid #ddd;background:#fff;color:#444}.gender{display:flex;align-items:center;gap:18px;min-height:32px}.gender span{display:inline-flex;align-items:center;gap:5px}.gender input,.newsletter-box input{margin:0}.gender label{text-align:left}.newsletter-box{display:flex;align-items:center;min-height:32px}.required{color:#e4434b}.field-validation-valid:empty{display:none}.field-validation-error{grid-column:2/4;color:#e4434b;padding-top:5px;white-space:normal}.input-validation-error{border-color:#e4434b!important}.buttons{text-align:center}.register-next-step-button{min-width:160px}.result{margin:0 0 30px;color:#4cb17c;font-size:14px}.message-error{margin:0 0 20px;color:#e4434b;text-align:center}.footer{background:#eee}.footer-upper{display:grid;grid-template-columns:repeat(4,1fr);gap:25px;width:min(1200px,95%);margin:auto;padding:45px 0}.footer-block .title{font-weight:bold;font-size:14px;margin-bottom:15px}.footer-block ul{list-style:none;padding:0;margin:0}.footer-block li{margin:0 0 12px;color:#777}.footer-lower{padding:25px max(2.5%,calc((100% - 1200px)/2));background:#ddd;color:#777;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.training-note{flex-basis:100%;font-size:12px}
+@media(max-width:1366px) and (min-width:1001px){.master-wrapper-content{width:980px}.inputs{grid-template-columns:265px 400px 12px}}
+@media(max-width:1000px){.header-lower{flex-direction:column}.header-upper{justify-content:center}.inputs{grid-template-columns:1fr minmax(180px,400px) 1fr}.header-menu ul{gap:20px}.footer-upper{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.header-links ul{gap:12px;flex-wrap:wrap;justify-content:center;padding:12px 0}.ico-cart{padding:8px}.header-logo a{font-size:32px}.search-box{width:100%}.search-box input{min-width:0;width:100%}.search-box .button-1{padding:10px 18px}.header-menu ul{gap:14px;padding:15px}.header-menu a{font-size:14px}.inputs{grid-template-columns:minmax(0,1fr) 12px;gap:8px}.inputs>label{grid-column:1/-1;text-align:center}.inputs>input,.inputs>.gender,.inputs>.newsletter-box{grid-column:1}.inputs>.required{grid-column:2}.gender,.newsletter-box{justify-content:center}.field-validation-error{grid-column:1/-1}.footer-upper{grid-template-columns:repeat(2,minmax(0,1fr));padding:30px 10px}.master-wrapper-content{padding-bottom:60px}}
+</style>
+</head>
+<body>
+  <div class="bar-notification success" id="bar-notification">
+    The product has been added to your wishlist
+  </div>
+
+  <div class="master-wrapper-page">
+    <div class="admin-header-links">
+      This is a training copy of a demo registration page for Playwright practice.
+    </div>
+
+    <header class="header">
+      <div class="header-upper">
+        <nav class="header-links" aria-label="Header links">
+          <ul>
+            <li><a href="#" class="ico-register">Register</a></li>
+            <li><a href="#" class="ico-login">Log in</a></li>
+            <li><a href="#" class="ico-wishlist">Wishlist <span class="wishlist-qty">(0)</span></a></li>
+            <li><a href="#" class="ico-cart">Shopping cart <span class="cart-qty">(0)</span></a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="header-lower">
+        <div class="header-logo">
+          <a href="#" aria-label="Demo store home"><span>nop</span>Commerce<small>demo store</small></a>
+        </div>
+        <div class="search-box store-search-box">
+          <form id="small-search-box-form">
+            <input type="text" class="search-box-text" id="small-searchterms" autocomplete="off" name="q" placeholder="Search store">
+            <button type="submit" class="button-1 search-box-button">Search</button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <nav class="header-menu" aria-label="Main menu">
+      <ul class="top-menu">
+        <li><a href="#">Computers</a></li>
+        <li><a href="#">Electronics</a></li>
+        <li><a href="#">Apparel</a></li>
+        <li><a href="#">Digital downloads</a></li>
+        <li><a href="#">Books</a></li>
+        <li><a href="#">Jewelry</a></li>
+        <li><a href="#">Gift Cards</a></li>
+      </ul>
+    </nav>
+
+    <main class="master-wrapper-content">
+      <div class="master-column-wrapper">
+        <div class="center-1">
+          <div class="page registration-page" id="registration-page">
+            <div class="page-title">
+              <h1>Register</h1>
+            </div>
+            <div class="page-body">
+              <form id="register-form" novalidate>
+                <div class="message-error validation-summary-errors hidden" id="validation-summary" role="alert">
+                  Please correct the errors and try again.
+                </div>
+
+                <div class="fieldset">
+                  <div class="title"><strong>Your Personal Details</strong></div>
+                  <div class="form-fields">
+                    <div class="inputs">
+                      <label>Gender:</label>
+                      <div class="gender">
+                        <span>
+                          <input id="gender-male" type="radio" name="Gender" value="M">
+                          <label for="gender-male">Male</label>
+                        </span>
+                        <span>
+                          <input id="gender-female" type="radio" name="Gender" value="F">
+                          <label for="gender-female">Female</label>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="inputs">
+                      <label for="FirstName">First name:</label>
+                      <input aria-required="true" id="FirstName" name="FirstName" type="text" autocomplete="given-name">
+                      <span class="required">*</span>
+                      <span class="field-validation-valid" data-valmsg-for="FirstName" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="inputs">
+                      <label for="LastName">Last name:</label>
+                      <input aria-required="true" id="LastName" name="LastName" type="text" autocomplete="family-name">
+                      <span class="required">*</span>
+                      <span class="field-validation-valid" data-valmsg-for="LastName" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="inputs">
+                      <label for="Email">Email:</label>
+                      <input aria-required="true" id="Email" name="Email" type="email" autocomplete="email">
+                      <span class="required">*</span>
+                      <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="fieldset">
+                  <div class="title"><strong>Company Details</strong></div>
+                  <div class="form-fields">
+                    <div class="inputs">
+                      <label for="Company">Company name:</label>
+                      <input id="Company" name="Company" type="text" autocomplete="organization">
+                      <span class="field-validation-valid" data-valmsg-for="Company" data-valmsg-replace="true"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="fieldset">
+                  <div class="title"><strong>Subscribe to newsletter</strong></div>
+                  <div class="form-fields">
+                    <div class="inputs newsletter-row">
+                      <label for="Newsletter">Newsletter:</label>
+                      <div class="newsletter-box">
+                        <input id="Newsletter" name="Newsletter" type="checkbox" checked>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="fieldset">
+                  <div class="title"><strong>Your Password</strong></div>
+                  <div class="form-fields">
+                    <div class="inputs">
+                      <label for="Password">Password:</label>
+                      <input aria-required="true" id="Password" name="Password" type="password" autocomplete="new-password">
+                      <span class="required">*</span>
+                      <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="inputs">
+                      <label for="ConfirmPassword">Confirm password:</label>
+                      <input aria-required="true" id="ConfirmPassword" name="ConfirmPassword" type="password" autocomplete="new-password">
+                      <span class="required">*</span>
+                      <span class="field-validation-valid" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="buttons">
+                  <button type="submit" id="register-button" name="register-button" class="button-1 register-next-step-button">Register</button>
+                </div>
+              </form>
+
+              <div id="registration-complete" class="hidden">
+                <div class="result" role="status">Your registration completed</div>
+                <div class="buttons">
+                  <button type="button" class="button-1 register-continue-button" id="continue-button">Continue</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-upper">
+        <div class="footer-block information">
+          <div class="title">Information</div>
+          <ul>
+            <li><a href="#">Sitemap</a></li>
+            <li><a href="#">Shipping & returns</a></li>
+            <li><a href="#">Privacy notice</a></li>
+            <li><a href="#">Conditions of Use</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Contact us</a></li>
+          </ul>
+        </div>
+        <div class="footer-block customer-service">
+          <div class="title">Customer service</div>
+          <ul>
+            <li><a href="#">Search</a></li>
+            <li><a href="#">News</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Recently viewed products</a></li>
+            <li><a href="#">Compare products list</a></li>
+            <li><a href="#">New products</a></li>
+          </ul>
+        </div>
+        <div class="footer-block my-account">
+          <div class="title">My account</div>
+          <ul>
+            <li><a href="#">My account</a></li>
+            <li><a href="#">Orders</a></li>
+            <li><a href="#">Addresses</a></li>
+            <li><a href="#">Shopping cart</a></li>
+            <li><a href="#">Wishlist</a></li>
+          </ul>
+        </div>
+        <div class="footer-block follow-us">
+          <div class="title">Follow us</div>
+          <ul>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">RSS</a></li>
+            <li><a href="#">YouTube</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-lower">
+        <div>Copyright © 2026 nopCommerce demo store. All rights reserved.</div>
+        <div>Powered by nopCommerce</div>
+        <div class="training-note">Independent Playwright training replica. Registration is simulated in this browser; use test data only.</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const storageKey = 'trainingNopCommerceRegisteredUsers';
+    const seededUsers = {
+      'registered@example.com': {
+        firstName: 'Registered',
+        lastName: 'User',
+        email: 'registered@example.com',
+        company: 'Training Seed',
+        newsletter: true
+      }
+    };
+
+    let memoryUsers = {};
+    const form = document.getElementById('register-form');
+    const completePanel = document.getElementById('registration-complete');
+    const summary = document.getElementById('validation-summary');
+    const fields = ['FirstName', 'LastName', 'Email', 'Password', 'ConfirmPassword'];
+
+    function readUsers() {
+      try {
+        return {
+          ...seededUsers,
+          ...memoryUsers,
+          ...JSON.parse(localStorage.getItem(storageKey) || '{}')
+        };
+      } catch (error) {
+        return { ...seededUsers, ...memoryUsers };
+      }
+    }
+
+    function saveUser(user) {
+      const users = readUsers();
+      users[user.email.toLowerCase()] = user;
+      try { localStorage.setItem(storageKey, JSON.stringify(users)); } catch { memoryUsers = users; }
+    }
+
+    function getField(id) {
+      return document.getElementById(id);
+    }
+
+    function getMessageElement(id) {
+      return document.querySelector(`[data-valmsg-for="${id}"]`);
+    }
+
+    function setError(id, message) {
+      const field = getField(id);
+      const messageElement = getMessageElement(id);
+      field.classList.toggle('input-validation-error', Boolean(message));
+      field.setAttribute('aria-invalid', String(Boolean(message)));
+      messageElement.id = id + '-error';
+      field.setAttribute('aria-describedby', messageElement.id);
+      messageElement.textContent = message;
+      messageElement.className = message ? 'field-validation-error' : 'field-validation-valid';
+    }
+
+    function clearErrors() {
+      summary.classList.add('hidden');
+      fields.forEach((id) => setError(id, ''));
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validate() {
+      clearErrors();
+      const errors = {};
+      const firstName = getField('FirstName').value.trim();
+      const lastName = getField('LastName').value.trim();
+      const email = getField('Email').value.trim();
+      const password = getField('Password').value;
+      const confirmPassword = getField('ConfirmPassword').value;
+      const users = readUsers();
+
+      if (!firstName) errors.FirstName = 'First name is required.';
+      if (!lastName) errors.LastName = 'Last name is required.';
+      if (!email) {
+        errors.Email = 'Email is required.';
+      } else if (!isValidEmail(email)) {
+        errors.Email = 'Wrong email';
+      } else if (Object.hasOwn(users, email.toLowerCase())) {
+        errors.Email = 'The specified email already exists';
+      }
+      if (!password) {
+        errors.Password = 'Password is required.';
+      } else if (password.length < 6) {
+        errors.Password = 'Password must meet the following rules: must have at least 6 characters';
+      }
+      if (!confirmPassword) {
+        errors.ConfirmPassword = 'Password is required.';
+      } else if (password && confirmPassword !== password) {
+        errors.ConfirmPassword = 'The password and confirmation password do not match.';
+      }
+
+      Object.entries(errors).forEach(([id, message]) => setError(id, message));
+      summary.classList.toggle('hidden', Object.keys(errors).length === 0);
+      return Object.keys(errors).length === 0;
+    }
+
+    function showCompleted() {
+      form.classList.add('hidden');
+      completePanel.classList.remove('hidden');
+      form.reset();
+      window.scrollTo({ top: 0 });
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!validate()) return;
+
+      saveUser({
+        gender: document.querySelector('input[name="Gender"]:checked')?.value || '',
+        firstName: getField('FirstName').value.trim(),
+        lastName: getField('LastName').value.trim(),
+        email: getField('Email').value.trim(),
+        company: getField('Company').value.trim(),
+        newsletter: getField('Newsletter').checked
+      });
+      showCompleted();
+    });
+
+    document.getElementById('continue-button').addEventListener('click', () => {
+      resetRegistration();
+    });
+
+    function resetRegistration() {
+      form.reset();
+      clearErrors();
+      form.classList.remove('hidden');
+      completePanel.classList.add('hidden');
+      getField('FirstName').focus();
+    }
+    document.querySelector('.ico-register').addEventListener('click', (event) => {
+      event.preventDefault();
+      resetRegistration();
+    });
+    window.trainingStore = Object.freeze({
+      reset() {
+        memoryUsers = {};
+        try { localStorage.removeItem(storageKey); } catch {}
+        resetRegistration();
+      }
+    });
+    document.getElementById('small-search-box-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const notification = document.getElementById('bar-notification');
+      notification.textContent = 'Search is disabled on this training page.';
+      notification.style.display = 'block';
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
