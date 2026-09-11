@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playwright 드롭다운 실습</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Pretendard", "Noto Sans KR", Arial, sans-serif;
+      color: #172033;
+      background: #f4f7fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    main {
+      width: min(100%, 520px);
+      padding: 36px;
+      border: 1px solid #d9e0eb;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 18px 45px rgb(36 52 76 / 12%);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 26px;
+    }
+
+    .description {
+      margin: 0 0 28px;
+      color: #566176;
+      line-height: 1.6;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 9px;
+      font-weight: 700;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      width: 100%;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 16px;
+      border: 1px solid #aeb9cb;
+      border-radius: 9px;
+      background: #fff;
+      color: #172033;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .dropdown-toggle:hover {
+      border-color: #5a74db;
+    }
+
+    .dropdown-toggle:focus-visible {
+      outline: 3px solid rgb(70 100 220 / 22%);
+      border-color: #4664dc;
+    }
+
+    .arrow {
+      width: 9px;
+      height: 9px;
+      border-right: 2px solid #566176;
+      border-bottom: 2px solid #566176;
+      transform: rotate(45deg) translateY(-2px);
+      transition: transform 160ms ease;
+    }
+
+    .dropdown-toggle[aria-expanded="true"] .arrow {
+      transform: rotate(225deg) translate(-2px, -2px);
+    }
+
+    .dropdown-list {
+      position: absolute;
+      z-index: 10;
+      top: calc(100% + 8px);
+      left: 0;
+      width: 100%;
+      max-height: 280px;
+      margin: 0;
+      padding: 6px;
+      overflow-y: auto;
+      list-style: none;
+      border: 1px solid #ccd4e1;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 14px 30px rgb(28 42 66 / 18%);
+    }
+
+    .dropdown-list[hidden] {
+      display: none;
+    }
+
+    .dropdown-option {
+      padding: 10px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .dropdown-option:hover,
+    .dropdown-option.active {
+      background: #edf1ff;
+      color: #294cc7;
+    }
+
+    .dropdown-option[aria-selected="true"] {
+      background: #4664dc;
+      color: #fff;
+    }
+
+    .result {
+      min-height: 24px;
+      margin: 18px 0 0;
+      color: #3e4a60;
+    }
+
+    .result strong {
+      color: #294cc7;
+    }
+
+    .tip {
+      margin: 26px 0 0;
+      padding: 13px 15px;
+      border-radius: 9px;
+      background: #fff7dc;
+      color: #6d5412;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>휴대폰 모델 선택</h1>
+    <p class="description">드롭다운을 열고 목록에서 원하는 휴대폰 모델을 선택하세요.</p>
+
+    <label class="field-label" id="phone-label">휴대폰 모델</label>
+    <div class="dropdown" id="phone-dropdown">
+      <button
+        type="button"
+        class="dropdown-toggle"
+        id="phone-model"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        aria-labelledby="phone-label phone-value"
+      >
+        <span id="phone-value">모델을 선택하세요</span>
+        <span class="arrow" aria-hidden="true"></span>
+      </button>
+
+      <ul
+        class="dropdown-list"
+        id="phone-options"
+        role="listbox"
+        aria-labelledby="phone-label"
+        hidden
+      >
+        <li class="dropdown-option" role="option" data-value="galaxy-s25-ultra" aria-selected="false">Samsung Galaxy S25 Ultra</li>
+        <li class="dropdown-option" role="option" data-value="galaxy-s25" aria-selected="false">Samsung Galaxy S25</li>
+        <li class="dropdown-option" role="option" data-value="galaxy-z-fold6" aria-selected="false">Samsung Galaxy Z Fold6</li>
+        <li class="dropdown-option" role="option" data-value="galaxy-z-flip6" aria-selected="false">Samsung Galaxy Z Flip6</li>
+        <li class="dropdown-option" role="option" data-value="iphone-16-pro-max" aria-selected="false">Apple iPhone 16 Pro Max</li>
+        <li class="dropdown-option" role="option" data-value="iphone-16-pro" aria-selected="false">Apple iPhone 16 Pro</li>
+        <li class="dropdown-option" role="option" data-value="iphone-16" aria-selected="false">Apple iPhone 16</li>
+        <li class="dropdown-option" role="option" data-value="iphone-16e" aria-selected="false">Apple iPhone 16e</li>
+        <li class="dropdown-option" role="option" data-value="pixel-9-pro-xl" aria-selected="false">Google Pixel 9 Pro XL</li>
+        <li class="dropdown-option" role="option" data-value="pixel-9-pro" aria-selected="false">Google Pixel 9 Pro</li>
+        <li class="dropdown-option" role="option" data-value="pixel-9" aria-selected="false">Google Pixel 9</li>
+        <li class="dropdown-option" role="option" data-value="xiaomi-15-ultra" aria-selected="false">Xiaomi 15 Ultra</li>
+        <li class="dropdown-option" role="option" data-value="xiaomi-15" aria-selected="false">Xiaomi 15</li>
+        <li class="dropdown-option" role="option" data-value="oneplus-13" aria-selected="false">OnePlus 13</li>
+        <li class="dropdown-option" role="option" data-value="sony-xperia-1-vi" aria-selected="false">Sony Xperia 1 VI</li>
+        <li class="dropdown-option" role="option" data-value="motorola-razr-50-ultra" aria-selected="false">Motorola Razr 50 Ultra</li>
+        <li class="dropdown-option" role="option" data-value="nothing-phone-2" aria-selected="false">Nothing Phone (2)</li>
+        <li class="dropdown-option" role="option" data-value="oppo-find-x8-pro" aria-selected="false">OPPO Find X8 Pro</li>
+        <li class="dropdown-option" role="option" data-value="vivo-x200-pro" aria-selected="false">vivo X200 Pro</li>
+        <li class="dropdown-option" role="option" data-value="asus-rog-phone-9-pro" aria-selected="false">ASUS ROG Phone 9 Pro</li>
+      </ul>
+    </div>
+
+    <p class="result" id="selection-result" aria-live="polite">선택된 모델이 없습니다.</p>
+    <p class="tip">실습: 목록을 연 상태에서 항목을 마우스 오른쪽 버튼으로 클릭해 보세요. 목록이 즉시 닫힙니다.</p>
+  </main>
+
+  <script>
+    const dropdown = document.querySelector('#phone-dropdown');
+    const toggle = document.querySelector('#phone-model');
+    const listbox = document.querySelector('#phone-options');
+    const valueText = document.querySelector('#phone-value');
+    const result = document.querySelector('#selection-result');
+    const options = [...listbox.querySelectorAll('[role="option"]')];
+    let activeIndex = -1;
+
+    function openDropdown() {
+      listbox.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      activeIndex = Math.max(options.findIndex(option => option.getAttribute('aria-selected') === 'true'), 0);
+      updateActiveOption();
+    }
+
+    function closeDropdown({ returnFocus = false } = {}) {
+      listbox.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      options.forEach(option => option.classList.remove('active'));
+      activeIndex = -1;
+      if (returnFocus)
+        toggle.focus();
+    }
+
+    function updateActiveOption() {
+      options.forEach((option, index) => option.classList.toggle('active', index === activeIndex));
+      options[activeIndex]?.scrollIntoView({ block: 'nearest' });
+    }
+
+    function selectOption(option) {
+      options.forEach(item => item.setAttribute('aria-selected', String(item === option)));
+      valueText.textContent = option.textContent;
+      result.innerHTML = `선택한 모델: <strong>${option.textContent}</strong>`;
+      toggle.dataset.value = option.dataset.value;
+      closeDropdown({ returnFocus: true });
+    }
+
+    toggle.addEventListener('click', () => {
+      if (listbox.hidden)
+        openDropdown();
+      else
+        closeDropdown();
+    });
+
+    toggle.addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (listbox.hidden)
+          openDropdown();
+        activeIndex = event.key === 'ArrowDown'
+          ? Math.min(activeIndex + 1, options.length - 1)
+          : Math.max(activeIndex - 1, 0);
+        updateActiveOption();
+      }
+
+      if (event.key === 'Enter' && !listbox.hidden && activeIndex >= 0) {
+        event.preventDefault();
+        selectOption(options[activeIndex]);
+      }
+
+      if (event.key === 'Escape' && !listbox.hidden) {
+        event.preventDefault();
+        closeDropdown();
+      }
+    });
+
+    options.forEach(option => {
+      option.addEventListener('click', () => selectOption(option));
+    });
+
+    document.addEventListener('pointerdown', event => {
+      if (!dropdown.contains(event.target))
+        closeDropdown();
+
+      // 오른쪽 버튼을 누르는 즉시 목록을 닫아 검사하기 어려운 UI를 재현합니다.
+      if (event.button === 2 && !listbox.hidden)
+        closeDropdown();
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !listbox.hidden)
+        closeDropdown({ returnFocus: true });
+    });
+  </script>
+</body>
+</html>
